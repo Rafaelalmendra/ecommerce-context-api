@@ -1,17 +1,15 @@
-import { Container } from './styles';
 import { memo } from 'react';
 import { IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
+import { useCartContext } from 'commom/context/cart';
+import { Container } from './styles';
 
-function Produto({
-  nome,
-  foto,
-  id,
-  valor,
-  unidade
-}) {
+function Produto({ nome, foto, id, valor, unidade }) {
+  const { cart, addProduct, removeProduct } = useCartContext();
+  const productInCart = cart.find(product => product.id === id);
+
   return (
       <Container>
         <div>
@@ -19,17 +17,21 @@ function Produto({
             src={`/assets/${foto}.png`}
             alt={`foto de ${nome}`}
           />
-          <p>
-            {nome} - R$ {valor?.toFixed(2)} <span>Kg</span>
-          </p>
+          <p>{nome} - R$ {valor?.toFixed(2)} <span>Kg</span></p>
         </div>
         <div>
-          <IconButton
+          <IconButton 
             color="secondary"
+            onClick={() => removeProduct(id)}
+            disabled={!productInCart}
           >
             <RemoveIcon />
           </IconButton>
-          <IconButton>
+          {productInCart ? productInCart.quantidade : 0}
+          <IconButton 
+            color="primary"
+            onClick={() => addProduct({ nome, foto, id, valor, unidade })}
+          >
             <AddIcon />
           </IconButton>
         </div>
@@ -37,4 +39,4 @@ function Produto({
   )
 }
 
-export default memo(Produto)
+export default memo(Produto);

@@ -1,28 +1,27 @@
-import {
-  Container,
-  Header,
-  Lista,
-} from './styles';
+import { useContext } from 'react';
+
+import { UserContext } from 'commom/context/user';
 import feira from './feira.json';
 import Produto from 'components/Produto';
 import NavBar from './NavBar';
 
+import { Container, Header, Lista } from './styles';
 
-function Feira() {
+export default function Feira() {
+  const { nome, saldo } = useContext(UserContext);
+
   return (
     <Container>
       <NavBar />
       <Header>
         <div>
-          <h2> Olá!</h2>
-          <h3> Saldo: R$</h3>
+          <h2>Olá! {nome}</h2>
+          <h3>Saldo: R$ {saldo}</h3>
         </div>
         <p>Encontre os melhores produtos orgânicos!</p>
       </Header>
       <Lista>
-        <h2>
-          Produtos:
-        </h2>
+        <h2>Produtos: </h2>
         {feira.map(produto => (
           <Produto
             {...produto}
@@ -33,5 +32,3 @@ function Feira() {
     </Container>
   )
 }
-
-export default Feira;
